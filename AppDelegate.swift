@@ -24,6 +24,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Navigation Controller
         let layout = UICollectionViewFlowLayout()
         window?.rootViewController = UINavigationController(rootViewController: HomeViewController(collectionViewLayout: layout))
+        
+        UINavigationBar.appearance().barTintColor = UIColor.lightGray
+        
+        application.statusBarStyle = .lightContent
+        //UINavigationBar.appearance().backgroundColor = UIColor.lightGray
+        
+        let statusBarBackgroundView = UIView()
+        statusBarBackgroundView.backgroundColor = UIColor.gray
+        
+        window?.addSubview(statusBarBackgroundView)
+        window?.addConstrainsWithFormat(format: "H:|[v0]|", views: statusBarBackgroundView)
+        window?.addConstrainsWithFormat(format: "V:|[v0(20)]|", views: statusBarBackgroundView)
+
         return true
     }
 
