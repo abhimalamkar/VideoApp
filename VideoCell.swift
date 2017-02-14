@@ -8,18 +8,50 @@
 
 import UIKit
 
-class VideoCell:UICollectionViewCell{
+class BaseCell: UICollectionViewCell {
     
     override init(frame :CGRect){
         super.init(frame: frame)
         setupViews()
     }
     
+    func setupViews(){
+    
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class VideoCell: BaseCell{
+    
+    var video: Video? {
+        didSet{
+         titleLabel.text = video?.title
+            if let thumbnailImageName = video?.thumbnailImage {
+               thumbnailImageView.image = UIImage(named: thumbnailImageName)
+            }else { thumbnailImageView.backgroundColor = UIColor.lightGray }
+            if let profileImageName = video?.channel?.profileImageName {
+                userProfileImageView.image = UIImage(named: profileImageName)
+            }
+            if let channelName = video?.channel?.name ,let numberOfView = video?.numberOfView {
+                
+                let numberFormater = NumberFormatter()
+                numberFormater.numberStyle = .decimal
+                
+                let bulletPoint: String = "\u{2022}"
+                let subTitleText = "\(channelName) \(bulletPoint) \(numberFormater.string(from: numberOfView)!)"
+                subtitleTextView.text = subTitleText
+            }
+        }
+    }
+    
     let thumbnailImageView: UIImageView = {
         let imageVIew = UIImageView()
         imageVIew.backgroundColor = UIColor.lightGray
         // imageVIew.backgroundColor = UIColor.lightGray
-        //imageVIew.image = UIImage(named: "image")
+        //imageVIew.image = video.thu
         imageVIew.contentMode = .scaleAspectFill
         imageVIew.clipsToBounds = true
         return imageVIew
@@ -33,14 +65,15 @@ class VideoCell:UICollectionViewCell{
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor.gray
+        //label.text = video.title
+        //label.backgroundColor = UIColor.gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let subtitleTextView: UITextView = {
         let view = UITextView()
-        view.backgroundColor = UIColor.gray
+        //view.backgroundColor = UIColor.gray
         view.translatesAutoresizingMaskIntoConstraints = false
         view.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         view.textColor = UIColor.lightGray
@@ -50,8 +83,8 @@ class VideoCell:UICollectionViewCell{
     let userProfileImageView: UIImageView = {
         let imageVIew = UIImageView()
         imageVIew.backgroundColor = UIColor.gray
-        // imageVIew.backgroundColor = UIColor.lightGray
-        //imageVIew.image = UIImage(named: "image")
+        imageVIew.contentMode = .scaleAspectFill
+        imageVIew.clipsToBounds = true
         imageVIew.layer.cornerRadius = 22
         imageVIew.layer.masksToBounds = true
         return imageVIew
@@ -63,7 +96,7 @@ class VideoCell:UICollectionViewCell{
         return view
     }()
     
-    func setupViews(){
+    override func setupViews(){
         
         //adding image view
         addSubview(thumbnailImageView)
@@ -117,10 +150,6 @@ class VideoCell:UICollectionViewCell{
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 20))
         
         
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }
